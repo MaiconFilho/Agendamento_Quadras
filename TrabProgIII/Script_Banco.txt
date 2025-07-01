@@ -1,0 +1,57 @@
+CREATE TABLE "User"(
+    "id" INTEGER NOT NULL,
+    "name" VARCHAR(255) NOT NULL,
+    "pwd" VARCHAR(255) NOT NULL,
+    "email" VARCHAR(255) NOT NULL,
+    "type" SMALLINT NOT NULL,
+    "createAt" DATE NOT NULL
+);
+ALTER TABLE
+    "User" ADD PRIMARY KEY("id");
+CREATE TABLE "Court"(
+    "id" INTEGER NOT NULL,
+    "name" VARCHAR(255) NOT NULL,
+    "location" VARCHAR(255) NOT NULL,
+    "status" SMALLINT NOT NULL,
+    "createAt" DATE NOT NULL
+);
+ALTER TABLE
+    "Court" ADD PRIMARY KEY("id");
+CREATE TABLE "CourtType"(
+    "id" INTEGER NOT NULL,
+    "name" VARCHAR(255) NOT NULL,
+    "desc" VARCHAR(255) NOT NULL,
+    "createAt" DATE NOT NULL
+);
+ALTER TABLE
+    "CourtType" ADD PRIMARY KEY("id");
+CREATE TABLE "CourtTypeLink"(
+    "id" INTEGER NOT NULL,
+    "idCourt" INTEGER NOT NULL,
+    "idCourtType" INTEGER NOT NULL,
+    "createAt" DATE NOT NULL
+);
+ALTER TABLE
+    "CourtTypeLink" ADD PRIMARY KEY("id");
+CREATE TABLE "Scheduling"(
+    "id" INTEGER NOT NULL,
+    "idUser" INTEGER NOT NULL,
+    "idCourt" INTEGER NOT NULL,
+    "scheduleDate" DATE NOT NULL,
+    "initialTime" TIME NOT NULL,
+    "endTime" TIME NOT NULL,
+    "obs" VARCHAR(255) NOT NULL,
+    "createAt" DATE NOT NULL
+);
+ALTER TABLE
+    "Scheduling" ADD PRIMARY KEY("id");
+ALTER TABLE
+    "Scheduling" ADD CONSTRAINT "scheduling_idcourt_foreign" FOREIGN KEY("idCourt") REFERENCES "Court"("id");
+ALTER TABLE
+    "CourtTypeLink" ADD CONSTRAINT "courttypelink_idcourttype_foreign" FOREIGN KEY("idCourtType") REFERENCES "CourtType"("id");
+ALTER TABLE
+    "CourtTypeLink" ADD CONSTRAINT "courttypelink_idcourt_foreign" FOREIGN KEY("idCourt") REFERENCES "Court"("id");
+ALTER TABLE
+    "Scheduling" ADD CONSTRAINT "scheduling_iduser_foreign" FOREIGN KEY("idUser") REFERENCES "User"("id");
+ALTER TABLE "User"
+  ADD CONSTRAINT chk_user_type CHECK ("type" IN (0, 1));
